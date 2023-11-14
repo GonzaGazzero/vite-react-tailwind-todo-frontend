@@ -1,19 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import TodoComputed from "./components/TodoComputed";
 import TodoCreate from "./components/TodoCreate";
 import TodoFilter from "./components/TodoFilter";
 import TodoList from "./components/TodoList";
 
-const initialStateTodos = [
-  { id: 1, title: "Ir al gimnasio", completed: true },
-  { id: 2, title: "Comprar verduras", completed: false },
-  { id: 3, title: "Comprar carne", completed: false },
-  { id: 4, title: "Limpiar pc", completed: false },
-];
+// const initialStateTodos = [
+//   { id: 1, title: "Ir al gimnasio", completed: true },
+//   { id: 2, title: "Comprar verduras", completed: false },
+//   { id: 3, title: "Comprar carne", completed: false },
+//   { id: 4, title: "Limpiar pc", completed: false },
+// ];
+
+const initialStateTodos = JSON.parse(localStorage.getItem("todos")) || [];
 
 const App = () => {
   const [todos, setTodos] = useState(initialStateTodos);
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   const createTodo = (title) => {
     const newTodo = {
@@ -61,10 +67,10 @@ const App = () => {
   };
 
   return (
-    <div className="bg-[url('./assets/images/bg-mobile-light.jpg')] bg-no-repeat bg-contain bg-gray-300 min-h-screen">
+    <div className="transition-all duration-500 bg-[url('./assets/images/bg-mobile-light.jpg')] bg-no-repeat bg-contain bg-gray-300 min-h-screen dark:bg-gray-900 dark:bg-[url('./assets/images/bg-mobile-dark.jpg')] md:bg-[url('./assets/images/bg-desktop-light.jpg')] md:dark:bg-[url('./assets/images/bg-desktop-dark.jpg')]">
       <Header />
 
-      <main className="container mx-auto px-4 mt-8">
+      <main className="container mx-auto px-4 mt-8 md:max-w-xl">
         <TodoCreate createTodo={createTodo} />
 
         <TodoList
@@ -81,7 +87,7 @@ const App = () => {
         <TodoFilter changeFilter={changeFilter} filter={filter} />
       </main>
 
-      <footer className="text-center mt-8">
+      <footer className="text-center mt-8 dark:text-gray-400">
         Drag and drofooter to reorder list
       </footer>
     </div>
